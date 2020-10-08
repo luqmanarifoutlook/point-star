@@ -21,3 +21,7 @@ The site is called [Cospace](https://cospace.000webhostapp.com/), a relationship
 * Edit your own profile
 * Add other users as friend
 * Comment on friend's profile
+
+## Example Login
+Username: arifchenko@gmail.com
+Password: 1234
