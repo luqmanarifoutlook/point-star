@@ -3,15 +3,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Site extends CI_Controller
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     public function index()
     {
-        // $this->func->logged(true);
+        $this->func->sessionCheck(true);
         redirect(base_url('home'));
     }
 
@@ -29,9 +23,7 @@ class Site extends CI_Controller
 
     public function login()
     {
-        if ($this->func->logged()) {
-            redirect(base_url('home'));
-        }
+        $this->func->sessionCheck(false);
         $data = array(
             'page' => array(
                 'menu'             => "Login",
@@ -44,9 +36,7 @@ class Site extends CI_Controller
 
     public function signup()
     {
-        if ($this->func->logged()) {
-            redirect(base_url('home'));
-        }
+        $this->func->sessionCheck(false);
         $data = array(
             'page' => array(
                 'menu'             => "Sign Up",
@@ -59,87 +49,63 @@ class Site extends CI_Controller
 
     public function home()
     {
-        // $this->func->logged(true);
+        $self = $this->func->sessionCheck(true);
         $data = array(
-            'page' => array(
+            'page'  => array(
                 'menu'             => "Home",
                 'title'            => "Welcome to Cospace! The best friendship platform for you",
                 'meta_description' => "This is a platform for you to make friends, be free!",
             ),
+            'users' => $this->data->userList($self->id, 3),
+            'self'  => $self,
         );
         $this->load->view('home', $data);
     }
 
     public function explore()
     {
-        // $this->func->logged(true);
+        $self = $this->func->sessionCheck(true);
         $data = array(
-            'page' => array(
+            'page'  => array(
                 'menu'             => "Explore",
                 'title'            => "Explore Your Partner From Around The World",
                 'meta_description' => "This is a platform for you to make friends, be free!",
             ),
+            'users' => $this->data->userList($self->id),
+            'self'  => $self,
         );
         $this->load->view('explore', $data);
     }
 
-    public function check()
+    public function profile($id)
     {
-        if ($this->func->logged()) {
-            redirect(base_url('home'));
-        }
-        $username = $this->func->input('post', 'username', 'username');
-        $password = $this->func->input('post', 'password', 'password');
-        $user     = $this->data->get('user', "WHERE (username = '$username' OR email = '$username') AND password = '$password' AND status = 'Active'");
-        if (!is_null($user)) {
-            $this->session->set_userdata('user', $user);
-            redirect(base_url('home'));
-        }
-        redirect(base_url('login'));
-    }
-
-    public function forgot()
-    {
-        if ($this->func->logged()) {
-            redirect(base_url('home'));
-        }
-        $this->load->view('forgot');
-    }
-
-    public function logout()
-    {
-        $this->session->unset_userdata('user');
-        redirect(base_url('index'));
-    }
-
-    public function profile()
-    {
-        $this->func->logged(true);
+        $self = $this->func->sessionCheck(true);
+        $user = $this->data->userGet($id);
         $data = array(
-            'user' => $this->func->logged(),
+            'page'     => array(
+                'menu'             => "Profile",
+                'title'            => "Profile of " . $user->name,
+                'meta_description' => "This is a platform for you to make friends, be free!",
+            ),
+            'comments' => $this->data->commentList($id),
+            'friends'  => $this->data->friendList($id),
+            'user'     => $user,
+            'self'     => $self,
         );
         $this->load->view('profile', $data);
     }
 
-    public function profile_update()
+    public function edit()
     {
-        $user  = $this->func->logged(true);
-        $check = $this->data->get('user', "WHERE username = '" . $this->func->input('post', 'username', 'username') . "' AND id != '$user->id'");
-        if (!is_null($check)) {
-            redirect(base_url('profile'));
-        }
-        $avatar = $this->func->upload('avatar', 'assets/img/user', $this->func->input('post', 'username', 'username') . '.jpg');
-        $update = array(
-            'username' => $this->func->input('post', 'username', 'username'),
-            'password' => $this->func->input('post', 'password', 'password') ? $this->func->input('post', 'password', 'password') : $user->password,
-            'name'     => $this->func->input('post', 'name'),
-            'phone'    => $this->func->input('post', 'phone'),
-            'email'    => $this->func->input('post', 'email'),
-            'status'   => $this->func->input('post', 'status'),
-            'avatar'   => !empty($avatar) ? $avatar[0]['image'] : $user->avatar,
+        $self = $this->func->sessionCheck(true);
+        $data = array(
+            'page' => array(
+                'menu'             => "Profile",
+                'title'            => "Edit Profile",
+                'meta_description' => "This is a platform for you to make friends, be free!",
+            ),
+            'self' => $self,
         );
-        $user = $this->data->update('user', $update, $user->id);
-        $this->session->set_userdata('user', $user);
-        redirect(base_url('profile'));
+        $this->load->view('edit', $data);
     }
 }

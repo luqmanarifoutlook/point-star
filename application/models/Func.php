@@ -3,24 +3,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Func extends CI_Model
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    public function auth()
+    public function sessionUser()
     {
         return $this->session->user ? json_decode(json_encode($this->session->user), false) : null;
     }
 
-    public function logged($required = false)
+    public function sessionCheck($required = null)
     {
-        $user = $this->auth();
-        if ($required) {
-            if (is_null($user)) {
-                redirect('login');
-            }
+        $user = $this->sessionUser();
+        if (($required == true) && is_null($user)) {
+            redirect(base_url('login'));
+        } 
+        elseif (($required == false) && !is_null($user)) {
+            redirect(base_url('home'));
         }
         return $user;
     }
@@ -50,6 +45,15 @@ class Func extends CI_Model
                 $value   = str_ireplace($special, "”", $value);
                 $value   = stripslashes($value);
                 break;
+            case 'lowercase':
+                $value = strtolower($value);
+                break;
+            case 'uppercase':
+                $value = strtoupper($value);
+                break;
+            case 'propercase':
+                $value = ucwords(strtolower($value));
+                break;
             case 'number':
                 preg_match_all('!\d+!', $value, $matches);
                 $value = !is_null($matches) ? join($matches[0], "") : 0;
@@ -58,7 +62,7 @@ class Func extends CI_Model
                 $value = md5($value);
                 break;
             default:
-                if (is_null($value) || ($value == "")) {
+                if ((is_null($value)) || ($value == "")) {
                     $value = null;
                 }
                 break;

@@ -9,15 +9,14 @@ $route['signup']              = 'site/signup';
 $route['login']               = 'site/login';
 $route['home']                = 'site/home';
 $route['explore']             = 'site/explore';
+$route['profile/(:any)']      = 'site/profile/$1';
+$route['edit']                = 'site/edit';
 
 $route['register']            = 'action/register';
 $route['auth']                = 'action/auth';
 $route['logout']              = 'action/logout';
 $route['update']              = 'action/update';
-$route['add']                 = 'action/add';
+$route['add/(:any)']          = 'action/add/$1';
 $route['comment']             = 'action/comment';
-
-$route['profile']             = 'users/profile';
-$route['edit']                = 'users/edit';
 $route['friends']             = 'users/friends';
 $route['user/(:any)']         = 'users/detail/$1';

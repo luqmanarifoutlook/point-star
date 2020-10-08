@@ -21,8 +21,8 @@
                         <div class="col-lg-8 col-md-6 col-12">
                             <div class="section-title text-center text-md-left mb-4 mb-sm-0 pb-2 pb-sm-0">
                                 <img src="<?php echo base_url('assets/images/logo-light.png'); ?>" class="mb-4" height="52" alt="">
-                                <h4 class="title text-white mb-4">Join the community and get inspired!</h4>
-                                <p class="text-white mb-0 para-desc"><span class="font-weight-bold">Cospace</span> offer a wealth of advantages for self starters, including networking opportunities, daily structure, and increased productivity.</p>
+                                <h4 class="title text-white mb-4">Join the platform and make friends!</h4>
+                                <p class="text-white mb-0 para-desc"><span class="font-weight-bold">Cospace</span> offer a wealth of advantages for self starters, including networking opportunities, and increased productivity.</p>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-6 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0" id="div-login">
@@ -30,7 +30,7 @@
                                 <div class="text-center">
                                     <h5 class="mb-4 pb-2">Login</h5>  
                                 </div>
-                                <form class="login-form mt-4" action="<?php echo base_url('auth'); ?>">
+                                <form class="login-form mt-4" action="<?php echo base_url('auth'); ?>" method="post">
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="form-group">
@@ -57,7 +57,7 @@
                                 <div class="text-center">
                                     <h5 class="mb-4 pb-2">Sign Up</h5>  
                                 </div>
-                                <form class="login-form mt-4" action="<?php echo base_url('register'); ?>">
+                                <form class="login-form mt-4" action="<?php echo base_url('register'); ?>" method="post">
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="form-group">

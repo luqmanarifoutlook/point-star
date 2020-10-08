@@ -11,68 +11,53 @@ class Action extends CI_Controller
 
     public function index()
     {
-        $this->func->logged(true);
-        redirect(base_url('home'));
+        redirect(base_url());
     }
 
-    public function login()
+    public function register()
     {
-        if ($this->func->logged()) {
-            redirect(base_url('home'));
-        }
-        $this->load->view('login');
-    }
-
-    public function check()
-    {
-        if ($this->func->logged()) {
-            redirect(base_url('home'));
-        }
-        $username = $this->func->input('post', 'username', 'username');
+        $this->func->sessionCheck(false);
+        $name     = $this->func->input('post', 'name', 'propercase');
+        $email    = $this->func->input('post', 'email', 'lowercase');
         $password = $this->func->input('post', 'password', 'password');
-        $user     = $this->data->get('user', "WHERE (username = '$username' OR email = '$username') AND password = '$password' AND status = 'Active'");
-        if (!is_null($user)) {
+        if ($this->data->registerCheck($email)) {
+            $user = $this->data->registerSet($name, $email, $password);
             $this->session->set_userdata('user', $user);
             redirect(base_url('home'));
         }
         redirect(base_url('login'));
     }
 
-    public function forgot()
+    public function auth()
     {
-        if ($this->func->logged()) {
+        $this->func->sessionCheck(false);
+        $email    = $this->func->input('post', 'email', 'lowercase');
+        $password = $this->func->input('post', 'password', 'password');
+        if (!is_null($user = $this->data->loginCheck($email, $password))) {
+            $this->session->set_userdata('user', $user);
             redirect(base_url('home'));
         }
-        $this->load->view('forgot');
+        redirect(base_url('login'));
     }
 
     public function logout()
     {
         $this->session->unset_userdata('user');
-        redirect(base_url('index'));
+        redirect(base_url());
     }
 
-    public function home()
+    public function add($id)
     {
-        $this->func->logged(true);
-        $data = array(
-            'user' => $this->func->logged(),
-        );
-        $this->load->view('home', $data);
+        $self = $this->func->sessionCheck(true);
+        if ($this->data->friendCheck($self->id, $id) == false) {
+            $this->data->friendSet($self->id, $id);
+        }
+        redirect($this->agent->referrer());
     }
 
-    public function profile()
+    public function update()
     {
-        $this->func->logged(true);
-        $data = array(
-            'user' => $this->func->logged(),
-        );
-        $this->load->view('profile', $data);
-    }
-
-    public function profile_update()
-    {
-        $user  = $this->func->logged(true);
+        $user  = $this->func->sessionCheck(true);
         $check = $this->data->get('user', "WHERE username = '" . $this->func->input('post', 'username', 'username') . "' AND id != '$user->id'");
         if (!is_null($check)) {
             redirect(base_url('profile'));

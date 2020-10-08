@@ -18,3 +18,15 @@
     margin: 30px auto 0;
     display: block;
 }
+
+.line-clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
+}
+
+.profiler li {
+    min-width: 60px;
+    text-align: center;
+}
