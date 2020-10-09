@@ -57,23 +57,33 @@ class Action extends CI_Controller
 
     public function update()
     {
-        $user  = $this->func->sessionCheck(true);
-        $check = $this->data->get('user', "WHERE username = '" . $this->func->input('post', 'username', 'username') . "' AND id != '$user->id'");
-        if (!is_null($check)) {
-            redirect(base_url('profile'));
-        }
-        $avatar = $this->func->upload('avatar', 'assets/img/user', $this->func->input('post', 'username', 'username') . '.jpg');
-        $update = array(
-            'username' => $this->func->input('post', 'username', 'username'),
-            'password' => $this->func->input('post', 'password', 'password') ? $this->func->input('post', 'password', 'password') : $user->password,
-            'name'     => $this->func->input('post', 'name'),
-            'phone'    => $this->func->input('post', 'phone'),
-            'email'    => $this->func->input('post', 'email'),
-            'status'   => $this->func->input('post', 'status'),
-            'avatar'   => !empty($avatar) ? $avatar[0]['image'] : $user->avatar,
+        $self     = $this->func->sessionCheck(true);
+        $user     = $this->data->userGet($self->id);
+        $name     = $this->func->input('post', 'name', 'propercase');
+        $phone    = $this->func->input('post', 'phone', 'number');
+        $email    = $this->func->input('post', 'email', 'lowercase');
+        $bio      = $this->func->input('post', 'bio');
+        $password = $this->func->input('post', 'password', 'password');
+        $avatar   = $this->func->upload('avatar', 'assets/images/users', md5($self->id) . '.jpg');
+        $data     = array(
+            'name'     => $name,
+            'phone'    => $phone,
+            'email'    => $email,
+            'bio'      => $bio,
+            'avatar'   => !empty($avatar) ? $avatar['image'] : $user->avatar,
+            'password' => $password ? $password : $self->password,
         );
-        $user = $this->data->update('user', $update, $user->id);
+        $user = $this->data->userUpdate($data, $self->id);
         $this->session->set_userdata('user', $user);
-        redirect(base_url('profile'));
+        redirect(base_url('profile/' . $self->id));
+    }
+
+    public function comment()
+    {
+        $self      = $this->func->sessionCheck(true);
+        $id_friend = $this->func->input('post', 'id_friend', 'number');
+        $message   = $this->func->input('post', 'message');
+        $this->data->commentSet($self->id, $id_friend, $message);
+        redirect($this->agent->referrer());
     }
 }

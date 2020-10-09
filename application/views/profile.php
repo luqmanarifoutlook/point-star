@@ -99,7 +99,8 @@
                 <h5 class="mt-4">Comments (<?php echo count($comments); ?>)</h5>
                 <div class="row">
                     <div class="col-12 mt-4">
-                        <form class="p-4 rounded border">
+                        <form class="p-4 rounded border" action="<?php echo base_url('comment'); ?>" method="post">
+                            <input type="hidden" name="id_friend" value="<?php echo $user->id; ?>">
                             <?php if (!is_null($comments)) { ?>
                             <ul class="media-list list-unstyled mb-0">
                                 <?php foreach ($comments as $comment) { ?>
@@ -119,6 +120,14 @@
                                 </li>
                                 <?php } ?>
                             </ul>
+                            <?php } else { ?>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>There are no comments yet!</label>
+                                    </div>
+                                </div>
+                            </div>
                             <?php } ?>
                             <?php if ($this->data->friendCheck($user->id, $self->id)) { ?>
                             <div class="row">

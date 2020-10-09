@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 08, 2020 at 03:24 AM
+-- Generation Time: Oct 09, 2020 at 01:56 PM
 -- Server version: 10.1.16-MariaDB
 -- PHP Version: 5.6.24
 
@@ -39,7 +39,8 @@ CREATE TABLE `comments` (
 --
 
 INSERT INTO `comments` (`id`, `created`, `id_user`, `id_friend`, `message`) VALUES
-(1, '2020-10-08 03:54:56', 2, 7, 'You might consider just not doing this in your query. This is formatting, not querying anymore. You get a clear true/false 1/0 in return which should do the trick.');
+(1, '2020-10-08 03:54:56', 2, 7, 'You might consider just not doing this in your query. This is formatting, not querying anymore. You get a clear true/false 1/0 in return which should do the trick.'),
+(2, '2020-10-09 18:51:40', 1, 2, 'Hello there!');
 
 -- --------------------------------------------------------
 
@@ -68,7 +69,9 @@ INSERT INTO `relation` (`id`, `created`, `id_user`, `id_friend`) VALUES
 (7, '2020-10-08 02:15:26', 6, 3),
 (8, '2020-10-08 02:15:26', 6, 7),
 (9, '2020-10-08 08:17:24', 1, 5),
-(10, '2020-10-08 08:18:04', 1, 7);
+(10, '2020-10-08 08:18:04', 1, 7),
+(11, '2020-10-09 18:39:32', 1, 2),
+(12, '2020-10-09 18:39:43', 1, 3);
 
 -- --------------------------------------------------------
 
@@ -92,7 +95,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `created`, `name`, `email`, `password`, `phone`, `avatar`, `bio`) VALUES
-(1, '2020-10-08 00:50:56', 'Arifchenko', 'arifchenko@gmail.com', '81dc9bdb52d04dc20036dbd8313ed055', NULL, 'default.jpg', 'Welcome to my profile!'),
+(1, '2020-10-08 00:50:56', 'Arifchenko', 'arifchenko@gmail.com', '81dc9bdb52d04dc20036dbd8313ed055', '085691281375', 'c4ca4238a0b923820dcc509a6f75849b.jpg', 'Welcome to my profile!'),
 (2, '2020-10-08 01:55:33', 'Ann Handley', 'ann_handley@gmail.com', '81dc9bdb52d04dc20036dbd8313ed055', '6281234567890', 'c81e728d9d4c2f636f067f89cc14862c.jpg', 'If you''re a marketer, you''ve likely heard of Ann Handley. Her list of credentials is lengthy, and if she really wanted to, she could go on and on and on about her accomplishments.'),
 (3, '2020-10-08 01:55:33', 'Rebecca Bollwitt', 'rebecca_bollwitt@gmail.com', '81dc9bdb52d04dc20036dbd8313ed055', '6281234567890', 'eccbc87e4b5ce2fe28308fd9f2a7baf3.jpg', 'Starting with a trophy emoji, Miss604 says she''s BC''s most award-winning blogger. I haven''t even looked at her pictures yet and the introduction of her bio has already sucked me in.'),
 (4, '2020-10-08 01:57:45', 'Mark Gallion', 'mark_gallion@gmail.com', '81dc9bdb52d04dc20036dbd8313ed055', '6281234567890', 'a87ff679a2f3e71d9181a67b7542122c.jpg', 'As a venture capitalist and an executive at several start-ups, Mark Gallion has different versions of his bio all over the internet. You can imagine some are more formal than others. But when it comes to his Twitter bio, he carefully phrased his information in a way that helps him connect with his audience — specifically, through the use of humor.'),
@@ -130,12 +133,12 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `relation`
 --
 ALTER TABLE `relation`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT for table `users`
 --

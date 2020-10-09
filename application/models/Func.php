@@ -13,8 +13,7 @@ class Func extends CI_Model
         $user = $this->sessionUser();
         if (($required == true) && is_null($user)) {
             redirect(base_url('login'));
-        } 
-        elseif (($required == false) && !is_null($user)) {
+        } elseif (($required == false) && !is_null($user)) {
             redirect(base_url('home'));
         }
         return $user;
@@ -34,17 +33,10 @@ class Func extends CI_Model
         }
         $value = trim($value);
         $value = xss_clean($value);
+        if ((is_null($value)) || ($value == "")) {
+            return $value = null;
+        }
         switch ($type) {
-            case 'text':
-                $breaks  = array("<br /> ", "<br> ", "<br/> ", "<br />", "<br>", "<br/>");
-                $special = array("\"");
-                $value   = nl2br($value);
-                $value   = addslashes($value);
-                $value   = preg_replace('!\s+!', ' ', $value);
-                $value   = str_ireplace($breaks, "\r\n", $value);
-                $value   = str_ireplace($special, "”", $value);
-                $value   = stripslashes($value);
-                break;
             case 'lowercase':
                 $value = strtolower($value);
                 break;
@@ -62,9 +54,6 @@ class Func extends CI_Model
                 $value = md5($value);
                 break;
             default:
-                if ((is_null($value)) || ($value == "")) {
-                    $value = null;
-                }
                 break;
         }
         return $value;
@@ -77,34 +66,28 @@ class Func extends CI_Model
         if (!is_dir(FCPATH . $path)) {
             mkdir(FCPATH . $path, 0777);
         }
-        if ($count = count($_FILES[$input]['name'])) {
-            for ($i = 0; $i < $count; $i++) {
-                $origin    = $_FILES[$input]['tmp_name'][$i];
-                $names     = explode('.', $_FILES[$input]['name'][$i]);
-                $extension = $names[count($names) - 1];
-                $temp      = '';
-                $image     = '';
-                if (preg_match('/jpg|jpeg/i', $extension)) {
-                    $temp = imagecreatefromjpeg($origin);
-                } else if (preg_match('/png/i', $extension)) {
-                    $temp = imagecreatefrompng($origin);
-                } else if (preg_match('/gif/i', $extension)) {
-                    $temp = imagecreatefromgif($origin);
-                } else if (preg_match('/bmp/i', $extension)) {
-                    $temp = imagecreatefrombmp($origin);
-                }
-                if ($temp) {
-                    $image = is_null($name) ? url_title(substr(join($names, '.'), 0, (-1 * strlen($extension))), '-', true) . '.jpg' : $name;
-                    imagejpeg($temp, FCPATH . $path . $image, 100);
-                    imagedestroy($temp);
-                    $photo = array(
-                        'path'    => $path,
-                        'image'   => $image,
-                        'sorting' => $i + 1,
-                    );
-                    array_push($data, $photo);
-                }
-            }
+        $origin    = $_FILES[$input]['tmp_name'];
+        $names     = explode('.', $_FILES[$input]['name']);
+        $extension = $names[count($names) - 1];
+        $temp      = '';
+        $image     = '';
+        if (preg_match('/jpg|jpeg/i', $extension)) {
+            $temp = imagecreatefromjpeg($origin);
+        } else if (preg_match('/png/i', $extension)) {
+            $temp = imagecreatefrompng($origin);
+        } else if (preg_match('/gif/i', $extension)) {
+            $temp = imagecreatefromgif($origin);
+        } else if (preg_match('/bmp/i', $extension)) {
+            $temp = imagecreatefrombmp($origin);
+        }
+        if ($temp) {
+            $image = is_null($name) ? url_title(substr(join($names, '.'), 0, (-1 * strlen($extension))), '-', true) . '.jpg' : $name;
+            imagejpeg($temp, FCPATH . $path . $image, 100);
+            imagedestroy($temp);
+            $data = array(
+                'path'    => $path,
+                'image'   => $image,
+            );
         }
         return $data;
     }

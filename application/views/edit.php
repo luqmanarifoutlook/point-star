@@ -36,7 +36,7 @@
                 <li><a href="<?php echo base_url('explore'); ?>">Explore</a></li>
             </ul>
             <div class="buy-menu-btn d-none mb-2">
-                <a href="<?php echo base_url('profile'); ?>">My Profile</a>
+                <a href="<?php echo base_url('profile/' . $self->id); ?>">My Profile</a>
             </div>
         </div>
     </div>
@@ -47,9 +47,9 @@
             <div class="col-lg-9 col-12">
                 <div class="section-title text-center mb-3">
                     <h4 class="title mb-4">Update Profile</h4>
-                    <p class="text-muted mb-0 para-desc mx-auto"><span class="font-weight-bold">Cospace</span> offer a wealth of advantages for self starters, including networking opportunities, daily structure, and increased productivity.</p>
+                    <p class="text-muted mb-0 para-desc mx-auto"><span class="font-weight-bold">Cospace</span> offer a wealth of advantages for self starters, including networking opportunities, and increased productivity</p>
                 </div>
-                <form class="faq-content mt-5" action="<?php echo base_url('update'); ?>" enctype="multipart/form-data">
+                <form class="faq-content mt-5" action="<?php echo base_url('update'); ?>" enctype="multipart/form-data" method="post" id="form-update">
                     <div class="accordion">
                         <div class="card border rounded mb-2">
                             <div class="faq position-relative">
@@ -64,7 +64,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group position-relative">
-                                                <img src="<?php echo base_url('assets/images/client/01.jpg'); ?>" class="card-img-top mt-0 mb-3" alt="">
+                                                <img src="<?php echo base_url('assets/images/users/' . $self->avatar); ?>" class="card-img-top mt-0 mb-3" alt="" id="avatar">
                                                 <input name="avatar" type="file" class="form-control">
                                             </div>
                                         </div>
@@ -86,25 +86,25 @@
                                         <div class="col-md-12">
                                             <div class="form-group position-relative">
                                                 <label>Name</label>
-                                                <input name="name" type="text" class="form-control">
+                                                <input name="name" type="text" maxlength="100" class="form-control" value="<?php echo $self->name; ?>" required>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="form-group position-relative">
                                                 <label>Phone</label>
-                                                <input name="subject" type="tel" class="form-control">
+                                                <input name="phone" type="number" maxlength="15" class="form-control" value="<?php echo $self->phone; ?>" required>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="form-group position-relative">
                                                 <label>Email</label>
-                                                <input name="email" type="email" class="form-control">
+                                                <input name="email" type="email" maxlength="30" class="form-control" value="<?php echo $self->email; ?>" required>
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="form-group position-relative">
                                                 <label>Bio</label>
-                                                <textarea name="comments" id="comments" rows="4" class="form-control"></textarea>
+                                                <textarea name="bio" rows="4" class="form-control" required><?php echo $self->bio; ?></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -124,14 +124,15 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group position-relative">
-                                                <label>Password</label>
-                                                <input name="password" type="password" class="form-control">
+                                                <label>Change Password</label>
+                                                <input name="password" type="password" maxlength="30" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="form-group position-relative">
                                                 <label>Confirm Password</label>
-                                                <input name="retype" type="password" class="form-control">
+                                                <input name="retype" type="password" maxlength="30" class="form-control">
+                                                <small class="mt-0 text-danger" id="alert-retype">Password not match</small>
                                             </div>
                                         </div>
                                     </div>
@@ -148,9 +149,24 @@
                 </form>
             </div>
         </div>
-
     </div>
 </section>
 <?php $this->load->view('include/footer'); ?>
+<script>
+$('#alert-retype').hide();
+$('#form-update').submit(function(e) {    
+    if ($('input[name=password]').val() || $('input[name=retype]').val()) {
+        if ($('input[name=password]').val() != $('input[name=retype]').val()) {
+            $('#alert-retype').show();
+            $('input[name=retype]').focus();
+            return false;
+        }
+    }
+    return true;
+});
+$('input[name=retype]').on('keydown', function(e) {
+    $('#alert-retype').hide();
+});
+</script>
 </body>
 </html>
